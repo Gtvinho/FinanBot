@@ -1,5 +1,5 @@
 # registrar_credito_parcelado.py
-from db import get_conn
+from database import get_connection
 from datetime import datetime
 
 def registrar_credito_parcelado(mensagem: str, pessoa: str, data_msg: datetime) -> str:
@@ -22,8 +22,10 @@ def registrar_credito_parcelado(mensagem: str, pessoa: str, data_msg: datetime) 
 
         valor_parcela = round(valor_total / num_parcelas, 2)
 
-        conn = get_conn()
-        conn.execute("""
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
             INSERT INTO creditos_parcelados 
             (data_compra, descricao, valor_total, num_parcelas, valor_parcela, registrado_por)
             VALUES (?, ?, ?, ?, ?, ?)
@@ -40,7 +42,7 @@ def registrar_credito_parcelado(mensagem: str, pessoa: str, data_msg: datetime) 
 
         return f"""✅ *Crédito Parcelado registrado!*
 
-📌 {descricao}
+📌 Descrição: {descricao}
 💰 Total: R$ {valor_total:,.2f}
 📦 {num_parcelas}x de R$ {valor_parcela:,.2f}"""
 

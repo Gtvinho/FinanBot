@@ -3,8 +3,9 @@ from datetime import datetime
 import logging
 import requests
 from werkzeug.serving import WSGIRequestHandler
-
+from registrar_vale import registrar_vale
 # Módulos
+from registrar_credito_parcelado import registrar_credito_parcelado
 from registrar_entrada import registrar_entrada
 from registrar_gasto import registrar_gasto
 # from registrar_cartao import registrar_cartao
@@ -164,12 +165,27 @@ def webhook():
                 "📌 *DÍVIDA*\n\n"
                 "*Formato:*\n`divida <descrição> <valor>`"
             )
+
         elif "extrato" in comando:
             enviar_mensagem(
                 "📊 *EXTRATO*\n\n"
                 "• `extrato` → mês atual\n"
                 "• `extrato anterior` → mês passado"
             )
+        elif "parcelado" in mensagem or "credito" in mensagem:
+                enviar_mensagem(
+                "💳 *CRÉDITO PARCELADO*\n\n"
+                "Registra uma compra parcelada no cartão de crédito.\n\n"
+                "*Formato:*\n"
+                "`credito_parcelado <descrição> <valor_total> <parcelas>`\n\n"
+                "*Exemplos:*\n"
+                "• `credito_parcelado notebook 4500 12`\n"
+                "• `credito_parcelado iphone 7200 24`\n"
+                "• `credito_parcelado sofa 2800 10`\n"
+                "• `credito_parcelado passagem sp 1350 6`\n\n"
+                "✅ O sistema calcula automaticamente o valor de cada parcela.\n"
+                "📊 No extrato aparecerá apenas a parcela do mês atual."
+                    )
         else:
             enviar_mensagem("❓ Comando não encontrado.")
         return "OK"
@@ -178,9 +194,19 @@ def webhook():
     elif mensagem.startswith("gasto"):
         responder(registrar_gasto, mensagem_raw, pessoa, data_convertida)
         return "OK"
-
+    elif mensagem.startswith("vale"):
+        responder(registrar_vale, mensagem_raw, pessoa, data_convertida)
+        return "OK"
     elif mensagem.startswith("entrada"):
         responder(registrar_entrada, mensagem_raw, pessoa, data_convertida)
+        return "OK"
+    elif mensagem.startswith("credito_parcelado") or mensagem.startswith("parcelado"):
+        responder(
+            registrar_credito_parcelado,
+            mensagem_raw,
+            pessoa,
+            data_convertida
+        )
         return "OK"
 
     elif mensagem.startswith("extrato"):
