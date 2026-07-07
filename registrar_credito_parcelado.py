@@ -19,32 +19,36 @@ def registrar_credito_parcelado(mensagem: str, pessoa: str, data_msg: datetime) 
             return "❌ Número de parcelas deve estar entre 1 e 60."
 
         descricao = " ".join(partes[1:-2])
-
         valor_parcela = round(valor_total / num_parcelas, 2)
+
+        # Primeira parcela começa no mês seguinte
+        mes_inicio = data_msg.month + 1
+        ano_inicio = data_msg.year
+        if mes_inicio > 12:
+            mes_inicio = 1
+            ano_inicio += 1
 
         conn = get_connection()
         cursor = conn.cursor()
         
         cursor.execute("""
             INSERT INTO creditos_parcelados 
-            (data_compra, descricao, valor_total, num_parcelas, valor_parcela, registrado_por)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (data_compra, descricao, valor_total, num_parcelas, valor_parcela, 
+             parcela_atual, mes_inicio, ano_inicio, registrado_por)
+            VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?)
         """, (
-            data_msg.isoformat(),
-            descricao,
-            valor_total,
-            num_parcelas,
-            valor_parcela,
-            pessoa
+            data_msg.isoformat(), descricao, valor_total, num_parcelas, 
+            valor_parcela, mes_inicio, ano_inicio, pessoa
         ))
         conn.commit()
         conn.close()
 
         return f"""✅ *Crédito Parcelado registrado!*
 
-📌 Descrição: {descricao}
+📌 {descricao}
 💰 Total: R$ {valor_total:,.2f}
-📦 {num_parcelas}x de R$ {valor_parcela:,.2f}"""
+📦 {num_parcelas}x de R$ {valor_parcela:,.2f}
+🗓️ Primeira parcela: {mes_inicio:02d}/{ano_inicio}"""
 
     except Exception as e:
-        return f"❌ Erro ao registrar parcelado: {str(e)}"
+        return f"❌ Erro ao registrar: {str(e)}"

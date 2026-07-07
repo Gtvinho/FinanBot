@@ -33,7 +33,8 @@ def registrar_gasto(mensagem_completa, pessoa, data):
         "dinheiro",
         "debito",
         "credito",
-        "transferencia"
+        "transferencia",
+        "vale"
     ]
 
     if forma_pagamento not in formas_validas:
