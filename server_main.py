@@ -10,7 +10,14 @@ from registrar_entrada import registrar_entrada
 from registrar_gasto import registrar_gasto
 # from registrar_cartao import registrar_cartao
 from consultar_gastos import consultar_gastos
+# =====================================================
+# INFORMAÇÕES DO SISTEMA
+# =====================================================
 
+NOME_BOT = "Financeiro Bot"
+VERSAO = "1.2.0"
+CRIADOR = "Gustavo Franzen Elicker"
+ANO = "2026"
 # =====================================================
 # CONFIGURAÇÃO
 # =====================================================
@@ -131,6 +138,7 @@ def webhook():
     elif mensagem in ("help", "ajuda"):
         enviar_mensagem(
             "*Comandos disponíveis:*\n\n"
+            "ℹ️ `Sobre` \n"
             "🧪 `teste`\n"
             "💰 `entrada`\n"
             "💸 `gasto`\n"
@@ -191,6 +199,24 @@ def webhook():
         return "OK"
 
     # ==================== COMANDOS PRINCIPAIS ====================
+    elif mensagem.startswith("sobre"):
+        enviar_mensagem(f"""*{NOME_BOT} v{VERSAO}*\n
+Seu assistente inteligente para controle financeiro via Whatsapp.\n
+✅ Registro de entradas e gastos\n
+✅ Controle de créditos e dívidas\n
+✅ Consultas e organização financeira\n
+✅ Separação de gastos no cartão normal e vale alimentação\n
+✅ Automação através do bot\n
+
+A versão 1.2 traz melhorias na organização dos registros, incluindo a separação entre gastos realizados no cartão convencional e despesas utilizando vale alimentação, proporcionando um controle financeiro mais preciso e detalhado.\n
+
+Desenvolvido com foco em praticidade, automação e facilidade de uso.\n
+
+👨‍💻 Criado por:\n
+{CRIADOR}\n
+© 2026 — Financeiro Bot
+    """)
+        return "OK"
     elif mensagem.startswith("gasto"):
         responder(registrar_gasto, mensagem_raw, pessoa, data_convertida)
         return "OK"
@@ -208,7 +234,6 @@ def webhook():
             data_convertida
         )
         return "OK"
-
     elif mensagem.startswith("extrato"):
         try:
             mes = data_convertida.month
