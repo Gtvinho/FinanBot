@@ -64,6 +64,7 @@ def consultar_gastos(mes: int, ano: int):
     # RELATÓRIO
     # ============================
     relatorio = [f"📊 *EXTRATO {mes:02d}/{ano}*\n"]
+###############################################################################################################################3
 
     relatorio.append("📥 *ENTRADAS*")
     if entradas:
@@ -73,7 +74,7 @@ def consultar_gastos(mes: int, ano: int):
         relatorio.append(f"**Total Entradas:** R$ {ajustar_valor(total_entradas)}")
     else:
         relatorio.append("Nenhuma entrada.")
-
+###############################################################################################################################3
     relatorio.append("\n🎟️ *VALES*")
     if vales or total_gastos_vale > 0:
         for v in vales:
@@ -84,18 +85,21 @@ def consultar_gastos(mes: int, ano: int):
         relatorio.append(f"**Saldo Vale:** R$ {ajustar_valor(saldo_vale)}")
     else:
         relatorio.append("Nenhum vale este mês.")
+###############################################################################################################################3
 
     relatorio.append("\n💸 *GASTOS*")
     if gastos:
         for g in gastos:
             if g['forma_pagamento'].lower() == 'vale' or 'vale' in g['descricao'].lower():
-                relatorio.append(f"• {g['data'][:10]} | {g['descricao']} (Vale)")
+               continue
             else:
                 relatorio.append(f"• {g['data'][:10]} | {g['descricao']}")
             relatorio.append(f"  {g['forma_pagamento'].title()} | R$ {ajustar_valor(g['valor'])}")
         relatorio.append(f"**Total Gastos Normais:** R$ {ajustar_valor(total_gastos_normais)}")
     else:
         relatorio.append("Nenhum gasto.")
+###############################################################################################################################3
+
     relatorio.append("\n💳 *PARCELADOS*")
     relatorio.append(" ✅ *Parcelas Pagas*")
     if parcelas_pagas:
@@ -104,6 +108,7 @@ def consultar_gastos(mes: int, ano: int):
         relatorio.append(f" **Total Pago:** R$ {ajustar_valor(sum(p['valor_parcela'] for p in parcelas_pagas))}")
     else:
         relatorio.append(" Nenhuma")
+###############################################################################################################################3
 
     relatorio.append("\n ⏳ *Parcelas deste mês*")
     if parcelas_novas:
@@ -112,6 +117,7 @@ def consultar_gastos(mes: int, ano: int):
         relatorio.append(f" **Total a Pagar:** R$ {ajustar_valor(sum(p['valor_parcela'] for p in parcelas_novas))}")
     else:
         relatorio.append(" Nenhuma")
+###############################################################################################################################3
 
     relatorio.append("\n📌 *DÍVIDAS EM ABERTO*")
     if dividas:
@@ -122,6 +128,8 @@ def consultar_gastos(mes: int, ano: int):
         relatorio.append("Nenhuma dívida.")
 
     relatorio.append(f"\n💰 *SALDO DO MÊS:* R$ {ajustar_valor(saldo)}")
+###############################################################################################################################3
+
     if 'saldo_vale' in locals():
         relatorio.append(f"🎟️ *Saldo Vale:* R$ {ajustar_valor(saldo_vale)}")
 
