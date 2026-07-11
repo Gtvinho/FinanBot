@@ -35,7 +35,7 @@ def registrar_credito_parcelado(mensagem: str, pessoa: str, data_msg: datetime) 
             INSERT INTO creditos_parcelados 
             (data_compra, descricao, valor_total, num_parcelas, valor_parcela, 
              parcela_atual, mes_inicio, ano_inicio, registrado_por)
-            VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?)
         """, (
             data_msg.isoformat(), descricao, valor_total, num_parcelas, 
             valor_parcela, mes_inicio, ano_inicio, pessoa
