@@ -6,18 +6,23 @@ from werkzeug.serving import WSGIRequestHandler
 from datetime import datetime, timedelta, timezone
 
 # ====================== IMPORTS ======================
-from database.db import get_connection
-from database.conversas import buscar_cliente_por_jid
+from database.adm_server_banco.db import get_connection
+from database.users_server_banco.usuarios import buscar_cliente_por_jid
 
 # Comandos
-from comandos.registrar.registrar_entrada import registrar_entrada
-from comandos.registrar.registrar_gasto import registrar_gasto
-from comandos.registrar.registrar_vale import registrar_vale
-from comandos.registrar.registrar_credito import registrar_credito
-from comandos.registrar.registrar_divida import registrar_divida
+#from comandos.registrar.registrar_entrada import registrar_entrada
+#from comandos.registrar.registrar_gasto import registrar_gasto
+#from comandos.registrar.registrar_vale import registrar_vale
+#from comandos.registrar.registrar_credito import registrar_credito
+#from comandos.registrar.registrar_divida import registrar_divida
+
+# Mensagens
+from mensagens_automaticas.help import enviar_mensagem_help
+from mensagens_automaticas.gerenciador_mensagens import identificar_mensagem_help
 
 # Systema
 from systema.verificacao import verificar_dados
+
 
 # ====================== CONFIGURAÇÃO ======================
 app = Flask(__name__)
@@ -81,12 +86,16 @@ def converter_data(data_msg: str) -> datetime:
 @app.route("/webhook", methods=["POST"])
 def webhook():
     dados = request.json
-    #print(dados)
-    #print(dados["data"]["key"]["remoteJid"])
+    print("==========================================")
+    print(dados)
+    print("==========================================")
+    print(dados["data"]["key"]["remoteJid"])
+    print("==========================================")
     if not dados or dados.get("event") != "messages.upsert":
         return "OK"
 
     resultado = verificar_dados(dados)
+    print(resultado)
     if resultado is None:
         return "OK"
 
@@ -120,8 +129,13 @@ def webhook():
         enviar_mensagem("✅ Sistema funcionando corretamente!", key["remoteJid"])
 
     elif mensagem in ("help", "ajuda"):
-        enviar_mensagem("Digite *help <comando>* para mais detalhes.", key["remoteJid"])
-
+        texto =enviar_mensagem_help()
+        enviar_mensagem(f"Digite *help <comando>* para mais detalhes.\n {texto} ", key["remoteJid"])
+    
+    elif mensagem.startswith("help") or mensagem.startswith("ajuda"):
+        comando = mensagem.split()[1]
+        enviar_mensagem(identificar_mensagem_help(comando),key["remoteJid"])
+    
     elif mensagem.startswith("sobre"):
         enviar_mensagem(f"""*{NOME_BOT} v{VERSAO}*\n
 Seu assistente inteligente para controle financeiro.\n
@@ -130,11 +144,11 @@ Seu assistente inteligente para controle financeiro.\n
 👨‍💻 Criado por: {CRIADOR}""", key["remoteJid"])
 
     elif mensagem.startswith("entrada"):
-        resposta = registrar_entrada(mensagem_raw, pessoa, data_convertida)
+        #resposta = registrar_entrada(mensagem_raw, pessoa, data_convertida)
         enviar_mensagem(resposta, key["remoteJid"])
 
     elif mensagem.startswith("gasto"):
-        resposta = registrar_gasto(mensagem_raw, pessoa, data_convertida)
+        #resposta = registrar_gasto(mensagem_raw, pessoa, data_convertida)
         enviar_mensagem(resposta, key["remoteJid"])
 
     else:

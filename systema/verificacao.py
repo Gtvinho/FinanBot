@@ -1,5 +1,5 @@
 # systema/verificacao.py
-from database.conversas import buscar_cliente_por_jid
+from database.users_server_banco.usuarios import buscar_cliente_por_jid
 
 
 def verificar_dados(dados: dict):
@@ -17,10 +17,11 @@ def verificar_dados(dados: dict):
     if "senderKeyDistributionMessage" in message:
         return None
 
-    cliente = buscar_cliente_por_jid(key.get("remoteJid"))
-    if cliente is None:
+    usuario = buscar_cliente_por_jid(key.get("remoteJid"))
+    if usuario is None:
         return None
-
+    else: 
+        print("usuario aqui: ",usuario)
     mensagem_raw = message.get("conversation")
     if not mensagem_raw:
         return None
@@ -32,6 +33,6 @@ def verificar_dados(dados: dict):
         "key": key,
         "message": message,
         "mensagem_raw": mensagem_raw,
-        "cliente": cliente,
+        "cliente": usuario,
         "pessoa": data.get("pushName", "Desconhecido")
     }

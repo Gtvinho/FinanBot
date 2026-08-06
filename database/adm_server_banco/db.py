@@ -2,7 +2,7 @@
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path("financeiro2.db")
+DB_PATH = Path("financeiro.db")
 
 def get_connection():
     """Retorna uma conexão com o banco de dados."""
