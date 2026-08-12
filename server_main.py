@@ -9,12 +9,15 @@ from datetime import datetime, timedelta, timezone
 from database.adm_server_banco.db import get_connection
 from database.users_server_banco.usuarios import buscar_cliente_por_jid
 
-# Comandos
+# Comandos 
+###########registros
 #from comandos.registrar.registrar_entrada import registrar_entrada
 #from comandos.registrar.registrar_gasto import registrar_gasto
 #from comandos.registrar.registrar_vale import registrar_vale
 #from comandos.registrar.registrar_credito import registrar_credito
 #from comandos.registrar.registrar_divida import registrar_divida
+########### Extrato
+#from comandos.consultar.extrato_main import 
 
 # Mensagens
 from mensagens_automaticas.help import enviar_mensagem_help
@@ -142,6 +145,9 @@ Seu assistente inteligente para controle financeiro.\n
 ✅ Registro de entradas e gastos\n
 ✅ Controle de dívidas e parcelados\n
 👨‍💻 Criado por: {CRIADOR}""", key["remoteJid"])
+    elif mensagem.startswith("extrato"): 
+        resposta = extrato
+        enviar_mensagem(resposta, key["remoteJid"])
 
     elif mensagem.startswith("entrada"):
         #resposta = registrar_entrada(mensagem_raw, pessoa, data_convertida)

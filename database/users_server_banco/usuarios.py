@@ -2,7 +2,7 @@
 from database.users_server_banco.db import get_connection
 
 def buscar_cliente_por_jid(jid: str):
-    """Retorna os dados do cliente pelo JID (número WhatsApp)"""
+    """Retorna os dados do cliente pelo JID (número conversa do whtasapp)"""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
