@@ -40,8 +40,11 @@ def consultar_gastos(mes: int, ano: int):
     
     total_gastos_normais = 0.0
     total_gastos_vale = 0.0
+    total_faturas_pagas = 0.0
     for g in gastos:
         valor = float(g[5])
+        if g[4] and g[4].lower() == "fatura":
+            total_faturas_pagas += float(g[5])
         if (g[4] and g[4].lower() == 'vale') or 'vale' in str(g[2]).lower():
             total_gastos_vale += valor
         else:
@@ -73,7 +76,7 @@ def consultar_gastos(mes: int, ano: int):
             parcelas_novas.append(p)
             #print("print 2")
             
-    saldo = total_entradas - total_gastos_normais - total_parcelados_desconto
+    saldo = total_entradas - total_gastos_normais - total_faturas_pagas
     saldo_vale = total_vales - total_gastos_vale
 
     # ====================== RELATÓRIO ======================
@@ -102,12 +105,15 @@ def consultar_gastos(mes: int, ano: int):
             relatorio.append(f"**Gastos com Vale:** - R$ {ajustar_valor(total_gastos_vale)}")
     else:
         relatorio.append("Nenhum vale este mês.")
-
+##################################################################
+##################################################################
     relatorio.append("\n💸 *GASTOS*")
     if gastos:
         for g in gastos:
             if (g[4] and g[4].lower() == 'vale') or 'vale' in str(g[2]).lower():
                 continue
+            # if (g[4] and g[4].lower() == 'fatura') or 'fatura' in str(g[2]).lower():
+            #     continue
             relatorio.append(f"• {str(g[0])[:10]} | {g[2]} | {str(g[4]).title() if g[4] else ''} | R$ {ajustar_valor(g[5])}")
         relatorio.append(f"**Total Gastos Normais:** R$ {ajustar_valor(total_gastos_normais)}")
     else:
@@ -117,25 +123,53 @@ def consultar_gastos(mes: int, ano: int):
 
     # Parcelamentos Ativos
     relatorio.append("\n💳 *PARCELAMENTOS ATIVOS* \n\n *Iniciados este mês*")
+
     if parcelados:
         for p in parcelados:
             if p[4] != mes:
-                relatorio.append(f"• {p[0]} |Valor: R$ {ajustar_valor(p[1])} | Parcelado em: x{p[3]}")
-        relatorio.append(f"\n**Total das Parcelas Ativas:** R$ {ajustar_valor(sum(float(p[1]) for p in parcelados))}")
+                relatorio.append(
+                    f"• {p[0]} | Valor: R$ {ajustar_valor(p[1])} | Parcelado em: x{p[3]}"
+                )
+
+        relatorio.append(
+            f"\n**Total das Parcelas Ativas:** "
+            f"R$ {ajustar_valor(sum(float(p[1]) for p in parcelados))}"
+        )
     else:
         relatorio.append("Nenhum parcelamento ativo.")
 
+
     # Parcelas deste mês
     relatorio.append("\n⏳ *Parcelas pagas neste mês*")
+
     if parcelas_novas:
-        for p in parcelas_novas:   
-            #for coluna in p.keys():
-            #    print(coluna, "=", p[coluna])
+        for p in parcelas_novas:
             parcela_atual = (ano - p["ano_inicio"]) * 12 + (mes - p["mes_inicio"]) + 1
-            relatorio.append(f" • {p[0]} ({parcela_atual}/{p[3]}) R$ {ajustar_valor(p[1])}")
-        relatorio.append(f" **Total de fatura pago este mês:** R$ {ajustar_valor(total_parcelados_desconto)}")
+
+            relatorio.append(
+                f" • {p[0]} ({parcela_atual}/{p[3]}) "
+                f"R$ {ajustar_valor(p[1])}"
+            )
+
+        relatorio.append(
+            f" **Total de fatura a pagar este mês:** "
+            f"R$ {ajustar_valor(total_parcelados_desconto)}"
+        )
     else:
         relatorio.append(" Nenhuma")
+
+
+    # Faturas efetivamente pagas
+    total_faturas_pagas = 0.0
+
+    for g in gastos:
+        if g[4] and g[4].lower() == "fatura":
+            total_faturas_pagas += float(g[5])
+
+    relatorio.append(
+        f"\n💵 **Valor pago das faturas:** "
+        f"R$ {ajustar_valor(total_faturas_pagas)}"
+    )
 ##################################################################
 ##################################################################
 
