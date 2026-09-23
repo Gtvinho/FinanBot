@@ -5,16 +5,23 @@ from datetime import datetime
 def registrar_credito_parcelado(mensagem: str, pessoa: str, data_msg: datetime) -> str:
     try:
         partes = mensagem.split()
-        if len(partes) < 4:
-            return "❌ Formato inválido.\nUse: `credito_parcelado <descrição> <valor_total> <parcelas>`"
-
+        if len(partes) == 3:
+            # return "❌ Formato inválido.\nUse: `credito_parcelado <descrição> <valor_total> <parcelas>`"
+            partes.append("1")
+            
         valor_total_str = partes[-2].replace(',', '.')
+        print(f"======{int(partes[-1])}{valor_total_str}==========")
         try:
             valor_total = float(valor_total_str)
             num_parcelas = int(partes[-1])
+            print (f"num parcelas {num_parcelas}")
+    
         except ValueError:
             return "❌ Valor ou número de parcelas inválido."
 
+        if num_parcelas ==  None: 
+            num_parcelas = 1
+  
         if num_parcelas < 1 or num_parcelas > 60:
             return "❌ Número de parcelas deve estar entre 1 e 60."
 

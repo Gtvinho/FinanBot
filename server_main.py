@@ -24,7 +24,7 @@ ANO = "2026"
 app = Flask(__name__)
 
 NOME_BOT = "Bot Financeiro"
-VERSAO = "1.0.0"
+VERSAO = "1.0.5"
 
 HOST = "0.0.0.0"
 PORTA = 5000
@@ -173,7 +173,17 @@ def webhook():
                 "📌 *DÍVIDA*\n\n"
                 "*Formato:*\n`divida <descrição> <valor>`"
             )
-
+        elif "vale" in comando: 
+            enviar_mensagem(
+                "📌 *VALE*\n\n"
+                "• `vale <tipo> <valor> [descrição]`\n"
+                
+                "• O comando vale separa vale do salario comum.\n"
+                "• Para gastar do vale use o comando gasto com o forma_pagamento = vale\n"
+            
+            
+            )
+            
         elif "extrato" in comando:
             enviar_mensagem(
                 "📊 *EXTRATO*\n\n"
@@ -192,6 +202,7 @@ def webhook():
                 "• `credito_parcelado sofa 2800 10`\n"
                 "• `credito_parcelado passagem sp 1350 6`\n\n"
                 "✅ O sistema calcula automaticamente o valor de cada parcela.\n"
+                "• Ao manter o campo da parcela vazia o sistema contara como 1x.\n"
                 "📊 No extrato aparecerá apenas a parcela do mês atual."
                     )
         else:
@@ -226,7 +237,7 @@ Desenvolvido com foco em praticidade, automação e facilidade de uso.\n
     elif mensagem.startswith("entrada"):
         responder(registrar_entrada, mensagem_raw, pessoa, data_convertida)
         return "OK"
-    elif mensagem.startswith("credito_parcelado") or mensagem.startswith("parcelado"):
+    elif mensagem.startswith("credito_parcelado") or mensagem.startswith("parcelado") or mensagem.startswith("credito"):
         responder(
             registrar_credito_parcelado,
             mensagem_raw,

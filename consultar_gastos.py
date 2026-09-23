@@ -76,7 +76,7 @@ def consultar_gastos(mes: int, ano: int):
             parcelas_novas.append(p)
             #print("print 2")
             
-    saldo = total_entradas - total_gastos_normais - total_faturas_pagas
+    saldo = total_entradas - total_gastos_normais 
     saldo_vale = total_vales - total_gastos_vale
 
     # ====================== RELATÓRIO ======================
