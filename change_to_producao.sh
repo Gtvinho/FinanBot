@@ -3,7 +3,7 @@
 deactivate
 echo "Antes: $(pwd)"
 
-cd "$HOME/financeiro-bot-dev" || exit 1
+cd "$HOME/financeiro-bot" || exit 1
 
 echo "Depois: $(pwd)"
 

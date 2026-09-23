@@ -23,7 +23,7 @@ ANO = "2026"
 # =====================================================
 app = Flask(__name__)
 
-NOME_BOT = "Bot Financeiro"
+NOME_BOT = "Bot Financeiro Homologação"
 VERSAO = "1.0.5"
 
 HOST = "0.0.0.0"
@@ -41,7 +41,7 @@ APIKEY = "financeiro-casal-teto-para-dois-2026"
 # FUNÇÕES AUXILIARES
 # =====================================================
 def resposta_robo(texto: str) -> str:
-    return f"🤖 *ROBO:*\n\n{texto}"
+    return f"🤖 *ROBO: --HOMOLOGAÇÂO*\n\n{texto}"
 
 
 def enviar_mensagem(texto: str) -> bool:
