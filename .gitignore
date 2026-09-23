@@ -1,2 +1,7 @@
 *__pycache__
 *.venv
+server_main.py
+fincanceiro_teste.db
+financeiro.db
+change_to_producao.sh
+limpar_banco.py
