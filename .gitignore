@@ -5,3 +5,4 @@ financeiro_teste.db
 financeiro.db
 change_to_producao.sh
 limpar_banco.py
+database.py
