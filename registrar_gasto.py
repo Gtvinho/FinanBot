@@ -40,7 +40,7 @@ def registrar_gasto(mensagem_completa, pessoa, data):
     if forma_pagamento not in formas_validas:
         raise ValueError(
             "❌ Forma de pagamento inválida.\n\n"
-            "Use: pix, dinheiro, debito, credito ou fatura."
+            "Use: pix, dinheiro, debito, credito, fatura ou vale."
         )
 
     try:
